@@ -772,8 +772,13 @@
             clearError();
             selectedAmountCents = valueCents;
             
-            const currentStep = document.querySelector('.step.active') || document.querySelector('.modal-content');
-            currentStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+            const currentStep = document.querySelector('.step.active');
+            if (currentStep) {
+                currentStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+            } else {
+                 backRedirectModal.querySelector('.modal-content').innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+            }
+
 
             try {
                 if (!clickId) throw new Error("Sessão inválida. Por favor, atualize a página.");
@@ -902,7 +907,7 @@
                     
                     document.getElementById('modal-couple-img').src = img;
                     document.getElementById('modal-couple-name').textContent = name;
-                    document.getElementById('modal-couple-desc').innerHTML = `Idade: ${age} | Local: <span class="city-highlight">${userCity}</span><br><br><strong>Disponível no grupo:</strong><br>${videos} vídeos e ${photos} fotos explícitas.<br>Acesso liberado com qualquer pacote.`;
+                    document.getElementById('modal-couple-desc').innerHTML = `Idade: ${age} | Local: <span class="city-highlight">${userCity}</span><br><br><strong>Disponível no grupo:</strong><br>${videos} vídeos e ${photos} fotos explícitas.<br><br><span style="color: var(--success); font-weight: 600;">Acesso liberado com qualquer pacote.</span>`;
                     coupleDetailsModal.classList.add('show');
                 });
             });
