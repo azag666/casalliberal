@@ -772,11 +772,13 @@
             clearError();
             selectedAmountCents = valueCents;
             
-            const currentStep = document.querySelector('.step.active');
-            if (currentStep) {
-                currentStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
-            } else {
-                 backRedirectModal.querySelector('.modal-content').innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+            const currentActiveStep = document.querySelector('.step.active');
+            const isFromModal = backRedirectModal.classList.contains('show');
+
+            if (isFromModal) {
+                backRedirectModal.querySelector('.modal-content').innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+            } else if (currentActiveStep) {
+                currentActiveStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
             }
 
 
