@@ -445,27 +445,27 @@
              <div class="featured-wrapper">
                 <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">Dezenas de casais como estes estão te esperando em <span id="city-name-couples" class="city-highlight">sua cidade</span>:</p>
                 <div class="featured-couples-grid">
-                    <div class="couple-card" data-name="Ana & Carlos" data-age="28 e 32" data-img="https://i.postimg.cc/nLm2nVN7/GMh-J3-PXUAAc-MHz.jpg">
+                    <div class="couple-card" data-name="Ana & Carlos" data-age="28 e 32" data-videos="18" data-photos="55" data-img="https://i.postimg.cc/nLm2nVN7/GMh-J3-PXUAAc-MHz.jpg">
                         <img src="https://i.postimg.cc/nLm2nVN7/GMh-J3-PXUAAc-MHz.jpg" alt="Casal Ana & Carlos">
                         <div class="caption">Ana & Carlos</div>
                     </div>
-                    <div class="couple-card" data-name="Beatriz & Tiago" data-age="25 e 29" data-img="https://i.postimg.cc/zBSkRtzf/GMa-Y8p-GWc-AA9-Pbo.jpg">
+                    <div class="couple-card" data-name="Beatriz & Tiago" data-age="25 e 29" data-videos="23" data-photos="68" data-img="https://i.postimg.cc/zBSkRtzf/GMa-Y8p-GWc-AA9-Pbo.jpg">
                         <img src="https://i.postimg.cc/zBSkRtzf/GMa-Y8p-GWc-AA9-Pbo.jpg" alt="Casal Beatriz & Tiago">
                         <div class="caption">Beatriz & Tiago</div>
                     </div>
-                     <div class="couple-card" data-name="Laura & Bruno" data-age="22 e 26" data-img="https://i.postimg.cc/Df6gvMpM/GLn-Im-LWWMAAWv4-G.jpg">
+                     <div class="couple-card" data-name="Laura & Bruno" data-age="22 e 26" data-videos="15" data-photos="40" data-img="https://i.postimg.cc/Df6gvMpM/GLn-Im-LWWMAAWv4-G.jpg">
                         <img src="https://i.postimg.cc/Df6gvMpM/GLn-Im-LWWMAAWv4-G.jpg" alt="Casal Laura & Bruno">
                         <div class="caption">Laura & Bruno</div>
                     </div>
-                    <div class="couple-card" data-name="Sofia & Ricardo" data-age="30 e 35" data-img="https://i.postimg.cc/L8YBV690/GHbj0mk-WEAAe-B4o.jpg">
+                    <div class="couple-card" data-name="Sofia & Ricardo" data-age="30 e 35" data-videos="28" data-photos="75" data-img="https://i.postimg.cc/L8YBV690/GHbj0mk-WEAAe-B4o.jpg">
                         <img src="https://i.postimg.cc/L8YBV690/GHbj0mk-WEAAe-B4o.jpg" alt="Casal Sofia & Ricardo">
                         <div class="caption">Sofia & Ricardo</div>
                     </div>
-                     <div class="couple-card" data-name="Juliana & Marcos" data-age="26 e 31" data-img="https://i.postimg.cc/sfZxndY9/Gr-Pf-DFq-Wg-AAn-Nl-N.jpg">
+                     <div class="couple-card" data-name="Juliana & Marcos" data-age="26 e 31" data-videos="25" data-photos="60" data-img="https://i.postimg.cc/sfZxndY9/Gr-Pf-DFq-Wg-AAn-Nl-N.jpg">
                         <img src="https://i.postimg.cc/sfZxndY9/Gr-Pf-DFq-Wg-AAn-Nl-N.jpg" alt="Juliana & Marcos">
                         <div class="caption">Juliana & Marcos</div>
                     </div>
-                     <div class="couple-card" data-name="Priscila & Fernando" data-age="29 e 34" data-img="https://i.postimg.cc/t4MWZ0FN/GPb-HLQs-XMAAOBob.jpg">
+                     <div class="couple-card" data-name="Priscila & Fernando" data-age="29 e 34" data-videos="22" data-photos="58" data-img="https://i.postimg.cc/t4MWZ0FN/GPb-HLQs-XMAAOBob.jpg">
                         <img src="https://i.postimg.cc/t4MWZ0FN/GPb-HLQs-XMAAOBob.jpg" alt="Priscila & Fernando">
                         <div class="caption">Priscila & Fernando</div>
                     </div>
@@ -702,24 +702,21 @@
             document.getElementById('online-count').textContent = onlineCount;
 
             try {
-                const params = new URLSearchParams(window.location.search);
-                const clickResponse = await fetch(`${API_BASE_URL}/api/registerClick`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        sellerApiKey: SELLER_API_KEY, presselId: PRESSEL_ID,
-                        referer: document.referrer || null, fbclid: params.get("fbclid"), 
-                        fbp: getCookie("_fbp"), fbc: getCookie("_fbc"), user_agent: navigator.userAgent, 
-                        utm_source: params.get("utm_source"), utm_campaign: params.get("utm_campaign"), 
-                        utm_medium: params.get("utm_medium"), utm_content: params.get("utm_content"), 
-                        utm_term: params.get("utm_term")
-                    })
-                });
+                // Tenta extrair o click_id da URL primeiro
+                const urlParams = new URLSearchParams(window.location.search);
+                const pathParts = window.location.pathname.split('/').filter(p => p);
+                const potentialClickId = pathParts[pathParts.length - 1];
 
-                if (!clickResponse.ok) throw new Error((await clickResponse.json()).message || 'Não consegui registrar seu acesso...');
-                
-                const clickData = await clickResponse.json();
-                clickId = clickData.click_id;
+                if (potentialClickId && potentialClickId.startsWith('lead')) {
+                    clickId = potentialClickId;
+                } else {
+                     clickId = urlParams.get('click_id');
+                }
+
+                if (!clickId) {
+                    showError("ID de acesso não encontrado. Verifique se você usou o link correto.");
+                    return;
+                }
 
                 const cityResponse = await fetch(`${API_BASE_URL}/api/click/info`, {
                     method: 'POST',
@@ -823,7 +820,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             PIXELS_TO_TRACK.forEach(p => { fbq('init', p.id); });
-            fbq('track', 'PageView');
+            // PageView é disparado pela presell, então não disparamos aqui para evitar duplicidade.
             
             confirmAgeBtn.addEventListener('click', () => {
                 ageGate.style.display = 'none';
@@ -872,10 +869,12 @@
                     const name = card.dataset.name;
                     const age = card.dataset.age;
                     const img = card.dataset.img;
+                    const videos = card.dataset.videos;
+                    const photos = card.dataset.photos;
                     
                     document.getElementById('modal-couple-img').src = img;
                     document.getElementById('modal-couple-name').textContent = name;
-                    document.getElementById('modal-couple-desc').innerHTML = `Idade: ${age}.<br>Local: <span class="city-highlight">${userCity}</span>`;
+                    document.getElementById('modal-couple-desc').innerHTML = `Idade: ${age} | Local: <span class="city-highlight">${userCity}</span><br><br><strong>Disponível no grupo:</strong><br>${videos} vídeos e ${photos} fotos explícitas.<br>Acesso liberado com qualquer pacote.`;
                     coupleDetailsModal.classList.add('show');
                 });
             });
