@@ -129,7 +129,7 @@
         .preview-container {
             position: relative;
             width: 100%;
-            padding-top: 125%; /* 4:5 Aspect Ratio */
+            padding-top: 125%;
             background-color: #000;
             border-radius: 12px;
             margin-bottom: 24px;
@@ -183,15 +183,27 @@
         }
         .online-dot { width: 8px; height: 8px; background: #22C55E; border-radius: 50%; box-shadow: 0 0 8px #22C55E; }
         
-        .content-list-wrapper {
-            background: rgba(0,0,0,0.2);
+        .bonus-box {
+            background: rgba(230, 0, 122, 0.1);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 16px;
             margin-bottom: 24px;
+            text-align: center;
         }
-        .content-list { list-style: none; padding: 0; margin: 0 auto; text-align: left; columns: 2; -webkit-columns: 2; -moz-columns: 2; }
-        .content-list li { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.9rem; }
+        .bonus-box p {
+            color: var(--accent-magenta);
+            font-weight: 700;
+            font-size: 1rem;
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .featured-wrapper { margin-bottom: 24px; }
+        .featured-couples-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .couple-card { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s ease; }
+        .couple-card:hover { transform: scale(1.05); border-color: var(--accent-magenta); }
+        .couple-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+        .couple-card .caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: var(--text-primary); padding: 12px 8px 6px; font-size: 0.8rem; font-weight: 600; text-align: center; }
 
         .packages-container { display: flex; flex-direction: column; gap: 12px; }
         .package-btn { background-color: transparent; border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s ease-in-out; position: relative; overflow: hidden; }
@@ -202,27 +214,77 @@
         .package-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
         .package-price { font-family: 'Orbitron', sans-serif; color: var(--accent-magenta); font-size: 1.2rem; font-weight: 700; }
         
-        .divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 24px 0;
-            position: relative;
-        }
-        .divider::before {
-            content: 'OU';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--bg-dark-secondary);
-            padding: 0 10px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
+        .divider { height: 1px; background: var(--border-color); margin: 24px 0; position: relative; }
+        .divider::before { content: 'OU'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-dark-secondary); padding: 0 10px; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
 
         /* Payment Step */
         .payment-info { text-align: center; }
+        .order-summary {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .order-summary h3 {
+            color: var(--accent-magenta);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .order-summary p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .order-summary div {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .checkout-preview {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .checkout-gif-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .checkout-gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #countdown {
+            background: rgba(230, 0, 122, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-grow: 1;
+            text-align: center;
+        }
+        #countdown-timer {
+            color: var(--accent-magenta);
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            display: block;
+            font-size: 1.2rem;
+            margin-top: 4px;
+        }
+
         .qr-code-display { padding: 12px; border-radius: 12px; margin: 0 auto 24px auto; display: inline-block; line-height: 0; border: 1px solid var(--border-color); background: #FFF; position: relative; overflow: hidden; }
         .qr-code-display::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent-magenta); opacity: 0.7; box-shadow: 0 0 10px var(--accent-magenta); animation: scan 2.5s infinite linear; }
         @keyframes scan { 0% { top: -10px; } 100% { top: 110%; } }
@@ -266,21 +328,21 @@
             transform: translateY(0);
         }
 
-        /* Back Redirect Modal */
-        #back-redirect-modal {
+        /* Modal Base */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px);
             z-index: 20000;
-            display: none; /* Hidden by default */
+            display: none;
             justify-content: center;
             align-items: center;
             padding: 20px;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        #back-redirect-modal.show {
+        .modal-overlay.show {
             display: flex;
             opacity: 1;
         }
@@ -295,12 +357,6 @@
             max-width: 380px;
             animation: fadeIn 0.5s ease;
         }
-        .modal-content .preview-container {
-             width: 100%;
-            max-width: 250px; /* Limit image size */
-            padding-top: 100%; /* Square aspect ratio for the image */
-            margin: 0 auto 24px auto;
-        }
         .modal-content h1 {
             font-family: 'Orbitron', sans-serif;
             color: var(--accent-magenta);
@@ -313,10 +369,6 @@
             margin-bottom: 24px;
             line-height: 1.6;
         }
-        .modal-content #offer-btn {
-            animation: pulse-glow 2s infinite ease-in-out;
-            margin-bottom: 12px;
-        }
         .close-modal-btn {
             background: none;
             border: none;
@@ -325,7 +377,23 @@
             font-size: 0.9rem;
             text-decoration: underline;
             padding: 8px;
+            margin-top: 12px;
         }
+        
+        #back-redirect-modal .preview-container {
+            max-width: 250px;
+            padding-top: 100%;
+            margin: 0 auto 24px auto;
+        }
+        #back-redirect-modal #offer-btn {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        
+        #couple-details-modal .modal-content { max-width: 420px; padding: 0; overflow: hidden;}
+        #couple-details-modal .modal-image { width: 100%; height: 400px; object-fit: cover; }
+        #couple-details-modal .modal-details-content { padding: 24px; }
+        #couple-details-modal #modal-package-btn { margin-top: 16px; }
+
 
         /* Error Message */
         .error-message { display: none; background-color: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; padding: 12px; margin-top: 16px; text-align: center; font-size: 0.9rem; }
@@ -352,11 +420,11 @@
         <!-- Passo 1: Prévia -->
         <div id="preview-step" class="step active">
             <div class="header">
-                <h1>BEM-VINDO AO OÁSIS</h1>
-                <p>O lugar secreto onde casais de <span id="city-name-preview" class="city-highlight">sua cidade</span> procuram homens para realizar suas fantasias.</p>
+                <h1>BEM-VINDO AO OÁSIS DE <span id="city-name-preview" class="city-highlight">SUA CIDADE</span></h1>
+                <p>Elas querem. Eles assistem. Você participa. Veja uma prévia da Juliana e do Marcos, um dos casais que te espera no grupo.</p>
             </div>
             <div class="preview-container">
-                <img id="preview-gif" src="https://i.postimg.cc/631TQ59J/Design-sem-nome-4.gif" alt="Preview do conteúdo">
+                <img id="preview-gif" src="https://i.postimg.cc/P5PKFQyk/GMvab-Mm-X0-AAf-KCp.jpg" alt="Preview do conteúdo">
             </div>
             <button id="unlock-button" class="unlock-btn">ENTRAR NO OÁSIS DA PUTARIA</button>
         </div>
@@ -365,23 +433,45 @@
         <div id="packages-step" class="step">
             <div class="header">
                 <h1>ENTRE NO OÁSIS DE <span id="city-name-packages" class="city-highlight">SUA CIDADE</span></h1>
-                <p>Sua <strong class="city-highlight">taxa de segurança</strong> protege o sigilo dos casais e garante que apenas homens de verdade entrem. Assim, trazemos mais casais para você.</p>
+                <p>Sua <strong class="city-highlight">taxa de segurança</strong> protege o sigilo e garante que apenas homens de verdade entrem. Assim, trazemos mais casais para você.</p>
             </div>
             <div id="online-indicator" class="online-indicator">
                 <div class="online-dot"></div>
                 <span><span id="online-count"></span> casais online em <span class="city-highlight" id="city-name-indicator">sua cidade</span></span>
             </div>
-             <div class="content-list-wrapper">
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">Você terá acesso a filmagens reais de:</p>
-                <ul class="content-list">
-                    <li>🎁 Sexo Anal 🍩</li>
-                    <li>🎁 Sexo com Amigas 👭</li>
-                    <li>🎁 Gozando Muito 💦</li>
-                    <li>🎁 Ménage 😈</li>
-                    <li>🎁 Sexo na Praia 🌴</li>
-                    <li>🎁 E muito mais...</li>
-                </ul>
+             <div class="bonus-box">
+                <p>QUALQUER PACOTE LIBERA +100 VÍDEOS BÔNUS DE CASAIS DE <span id="city-name-bonus" class="city-highlight">SUA CIDADE</span></p>
             </div>
+             <div class="featured-wrapper">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">Dezenas de casais como estes estão te esperando em <span id="city-name-couples" class="city-highlight">sua cidade</span>:</p>
+                <div class="featured-couples-grid">
+                    <div class="couple-card" data-name="Ana & Carlos" data-age="28 e 32" data-img="https://i.postimg.cc/nLm2nVN7/GMh-J3-PXUAAc-MHz.jpg">
+                        <img src="https://i.postimg.cc/nLm2nVN7/GMh-J3-PXUAAc-MHz.jpg" alt="Casal Ana & Carlos">
+                        <div class="caption">Ana & Carlos</div>
+                    </div>
+                    <div class="couple-card" data-name="Beatriz & Tiago" data-age="25 e 29" data-img="https://i.postimg.cc/zBSkRtzf/GMa-Y8p-GWc-AA9-Pbo.jpg">
+                        <img src="https://i.postimg.cc/zBSkRtzf/GMa-Y8p-GWc-AA9-Pbo.jpg" alt="Casal Beatriz & Tiago">
+                        <div class="caption">Beatriz & Tiago</div>
+                    </div>
+                     <div class="couple-card" data-name="Laura & Bruno" data-age="22 e 26" data-img="https://i.postimg.cc/Df6gvMpM/GLn-Im-LWWMAAWv4-G.jpg">
+                        <img src="https://i.postimg.cc/Df6gvMpM/GLn-Im-LWWMAAWv4-G.jpg" alt="Casal Laura & Bruno">
+                        <div class="caption">Laura & Bruno</div>
+                    </div>
+                    <div class="couple-card" data-name="Sofia & Ricardo" data-age="30 e 35" data-img="https://i.postimg.cc/L8YBV690/GHbj0mk-WEAAe-B4o.jpg">
+                        <img src="https://i.postimg.cc/L8YBV690/GHbj0mk-WEAAe-B4o.jpg" alt="Casal Sofia & Ricardo">
+                        <div class="caption">Sofia & Ricardo</div>
+                    </div>
+                     <div class="couple-card" data-name="Juliana & Marcos" data-age="26 e 31" data-img="https://i.postimg.cc/sfZxndY9/Gr-Pf-DFq-Wg-AAn-Nl-N.jpg">
+                        <img src="https://i.postimg.cc/sfZxndY9/Gr-Pf-DFq-Wg-AAn-Nl-N.jpg" alt="Juliana & Marcos">
+                        <div class="caption">Juliana & Marcos</div>
+                    </div>
+                     <div class="couple-card" data-name="Priscila & Fernando" data-age="29 e 34" data-img="https://i.postimg.cc/t4MWZ0FN/GPb-HLQs-XMAAOBob.jpg">
+                        <img src="https://i.postimg.cc/t4MWZ0FN/GPb-HLQs-XMAAOBob.jpg" alt="Priscila & Fernando">
+                        <div class="caption">Priscila & Fernando</div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="packages-container">
                 <button class="package-btn" data-value="1990">
                     <div class="package-title">Acesso Bronze</div>
@@ -413,8 +503,22 @@
         <!-- Passo 3: Pagamento -->
         <div id="payment-step" class="step">
             <div class="header">
-                <h1>CONFIRME SUA VERIFICAÇÃO</h1>
-                <p>Finalize o PIX da taxa de segurança para liberar seu acesso imediato aos grupos.</p>
+                <h1>CONFIRME SEU ACESSO</h1>
+                <p>Sua vaga está reservada. Finalize o PIX para entrar no grupo. Vagas limitadas!</p>
+            </div>
+             <div class="order-summary">
+                <h3 id="summary-title"></h3>
+                <p id="summary-desc"></p>
+                <div id="summary-price"></div>
+            </div>
+            <div class="checkout-preview">
+                <div class="checkout-gif-container">
+                    <img src="https://i.postimg.cc/VvkkWv8b/Design-sem-nome.gif" alt="Preview checkout">
+                </div>
+                <div id="countdown">
+                    Sua vaga expira em:<br>
+                    <span id="countdown-timer">10:00</span>
+                </div>
             </div>
             <div class="payment-info">
                  <div class="qr-code-display">
@@ -438,7 +542,7 @@
                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>
                 </div>
                 <h1>BEM-VINDO AO OÁSIS!</h1>
-                <p>Seu acesso foi liberado. Entre agora nos grupos de <span id="city-name-success" class="city-highlight">sua cidade</span> e conheça os casais que estão te esperando.</p>
+                <p>Seu acesso foi liberado. Clique no botão abaixo para ser redirecionado imediatamente para os grupos de WhatsApp e Telegram e conheça os casais de <span id="city-name-success" class="city-highlight">sua cidade</span> que estão te esperando.</p>
                 <a href="#" id="vip-access-link" class="vip-access-btn" target="_blank">ENTRAR NO OÁSIS (WHATSAPP + TELEGRAM)</a>
             </div>
         </div>
@@ -452,11 +556,11 @@
         <span id="notification-text"></span>
     </div>
     
-    <!-- Back Redirect Offer Modal -->
-    <div id="back-redirect-modal">
+    <!-- Modals -->
+    <div id="back-redirect-modal" class="modal-overlay">
         <div class="modal-content">
              <div class="preview-container">
-                <img src="https://i.postimg.cc/h4pHkfK5/Design-sem-nome-6.gif" alt="Oferta Especial">
+                <img src="https://i.postimg.cc/LXBJVGgc/GO8-Pkv-Wk-AASJec.jpg" alt="Oferta Especial">
             </div>
             <h1>ESPERE! ÚLTIMA CHANCE!</h1>
             <p>Um casal de <span class="city-highlight" id="city-name-modal">sua cidade</span> ficou disponível e procura um parceiro para <strong class="city-highlight">AGORA</strong>.</p>
@@ -465,6 +569,18 @@
                 ENTRAR AGORA POR R$ 9,90
             </button>
             <button id="close-modal-btn" class="close-modal-btn">Não, obrigado. Perder esta chance.</button>
+        </div>
+    </div>
+
+    <div id="couple-details-modal" class="modal-overlay">
+        <div class="modal-content">
+            <img id="modal-couple-img" src="" alt="Foto do Casal" class="modal-image">
+            <div class="modal-details-content">
+                <h1 id="modal-couple-name"></h1>
+                <p id="modal-couple-desc"></p>
+                <button id="modal-package-btn" class="unlock-btn">Quero Acesso Agora</button>
+                <button id="modal-close-btn" class="close-modal-btn">Voltar para a lista</button>
+            </div>
         </div>
     </div>
 
@@ -484,7 +600,6 @@
         const paymentStep = document.getElementById('payment-step');
         const successStep = document.getElementById('success-step');
         const unlockButton = document.getElementById('unlock-button');
-        const packageButtons = document.querySelectorAll('.package-btn');
         const pixCodeText = document.getElementById('pix-code-text');
         const copyButton = document.getElementById('copy-button');
         const vipAccessLink = document.getElementById('vip-access-link');
@@ -493,6 +608,7 @@
         const backRedirectModal = document.getElementById('back-redirect-modal');
         const offerBtn = document.getElementById('offer-btn');
         const closeModalBtn = document.getElementById('close-modal-btn');
+        const coupleDetailsModal = document.getElementById('couple-details-modal');
         
         // --- VARIÁVEIS DE ESTADO ---
         let selectedAmountCents = null;
@@ -500,6 +616,7 @@
         let transactionId = null;
         let pixCodeToCopy = '';
         let pollingInterval = null;
+        let countdownInterval = null;
         let userCity = 'sua cidade';
 
         // --- FUNÇÕES AUXILIARES ---
@@ -542,6 +659,8 @@
             document.getElementById('city-name-success').textContent = finalCityName;
             document.getElementById('city-name-indicator').textContent = `em ${finalCityName}`;
             document.getElementById('city-name-modal').textContent = finalCityName;
+            document.getElementById('city-name-couples').textContent = finalCityName;
+            document.getElementById('city-name-bonus').textContent = finalCityName;
         }
         
         function showNotification() {
@@ -556,6 +675,23 @@
             setTimeout(() => {
                 notificationPopup.classList.remove('show');
             }, 5000);
+        }
+
+        function startCheckoutTimer() {
+            let duration = 10 * 60; // 10 minutos
+            const timerElement = document.getElementById('countdown-timer');
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                const minutes = Math.floor(duration / 60).toString().padStart(2, '0');
+                const seconds = (duration % 60).toString().padStart(2, '0');
+                timerElement.textContent = `${minutes}:${seconds}`;
+
+                if (--duration < 0) {
+                    clearInterval(countdownInterval);
+                    timerElement.textContent = "EXPIRADO";
+                }
+            }, 1000);
         }
 
         // --- LÓGICA DA API ---
@@ -587,7 +723,7 @@
 
                 const cityResponse = await fetch(`${API_BASE_URL}/api/click/info`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': SELLER_API_KEY },
+                    headers: { 'Content-Type': "application/json", 'x-api-key': SELLER_API_KEY },
                     body: JSON.stringify({ click_id: clickId })
                 });
 
@@ -607,7 +743,7 @@
         }
 
 
-        async function handlePackageSelection(valueCents) {
+        async function handlePackageSelection(valueCents, title, desc, price) {
             clearError();
             selectedAmountCents = valueCents;
             
@@ -629,12 +765,18 @@
                 transactionId = pixData.transaction_id;
                 pixCodeToCopy = pixData.qr_code_text;
 
+                document.getElementById('summary-title').textContent = title;
+                document.getElementById('summary-desc').textContent = desc;
+                document.getElementById('summary-price').textContent = price;
+
                 if (pixData.qr_code_base64) {
                     document.getElementById('qr-code-img').src = `data:image/png;base64,${pixData.qr_code_base64}`;
                 }
 
                 backRedirectModal.classList.remove('show');
+                coupleDetailsModal.classList.remove('show');
                 switchStep(paymentStep);
+                startCheckoutTimer();
                 setTimeout(() => {
                     typeText(pixCodeText, pixCodeToCopy);
                     vipAccessLink.href = `https://t.me/${TELEGRAM_USERNAME}?start=${clickId}`;
@@ -654,6 +796,7 @@
                 const data = await response.json();
                 if (data.status === 'paid') {
                     stopPolling();
+                    if(countdownInterval) clearInterval(countdownInterval);
                     fbq('track', 'Purchase', {value: selectedAmountCents / 100, currency: 'BRL'});
                     switchStep(successStep);
                 }
@@ -704,18 +847,48 @@
             document.querySelectorAll('.package-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const value = parseInt(button.dataset.value, 10);
-                    handlePackageSelection(value);
+                    const title = button.querySelector('.package-title').textContent;
+                    const desc = button.querySelector('.package-desc').textContent;
+                    const price = button.querySelector('.package-price').textContent;
+                    handlePackageSelection(value, title, desc, price);
                 });
             });
             
             offerBtn.addEventListener('click', () => {
                 const value = parseInt(offerBtn.dataset.value, 10);
-                handlePackageSelection(value);
+                const title = "Acesso Imediato (OFERTA)";
+                const desc = "Acesso de emergência ao grupo por um valor simbólico.";
+                const price = "R$ 9,90";
+                handlePackageSelection(value, title, desc, price);
             });
 
             closeModalBtn.addEventListener('click', () => {
                 backRedirectModal.classList.remove('show');
             });
+            
+            // Couple Details Modal Logic
+            document.querySelectorAll('.couple-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = card.dataset.name;
+                    const age = card.dataset.age;
+                    const img = card.dataset.img;
+                    
+                    document.getElementById('modal-couple-img').src = img;
+                    document.getElementById('modal-couple-name').textContent = name;
+                    document.getElementById('modal-couple-desc').innerHTML = `Idade: ${age}.<br>Local: <span class="city-highlight">${userCity}</span>`;
+                    coupleDetailsModal.classList.add('show');
+                });
+            });
+
+            document.getElementById('modal-close-btn').addEventListener('click', () => {
+                coupleDetailsModal.classList.remove('show');
+            });
+
+            document.getElementById('modal-package-btn').addEventListener('click', () => {
+                coupleDetailsModal.classList.remove('show');
+                switchStep(packagesStep);
+            });
+
 
             copyButton.addEventListener('click', () => {
                 if (!pixCodeToCopy) return;
