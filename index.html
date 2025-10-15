@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Privado - Casais Liberais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://novaapi-one.vercel.app">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark-primary: #0A0A0A;
+            --bg-dark-secondary: #121212;
+            --border-color: rgba(230, 0, 122, 0.25);
+            --text-primary: #E5E7EB;
+            --text-secondary: #808898;
+            --accent-magenta: #E6007A;
+            --accent-glow: rgba(230, 0, 122, 0.4);
+            --success: #22C55E;
+            --danger: #EF4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark-primary);
+            background: linear-gradient(-45deg, #121212, #0A0A0A, #121212);
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark-primary);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--bg-dark-secondary);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(230, 0, 122, 0.2), inset 0 0 20px rgba(230, 0, 122, 0.1);
+            overflow: hidden;
+            transition: height 0.5s ease-in-out;
+        }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; margin-bottom: 24px; }
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-magenta);
+            text-shadow: 0 0 10px var(--accent-glow);
+            letter-spacing: 1px;
+            word-wrap: break-word;
+        }
+        .header p { color: var(--text-secondary); margin-top: 8px; font-size: 1rem; line-height: 1.5; }
+        .city-highlight {
+            color: var(--accent-magenta);
+            font-weight: 700;
+        }
+        
+        /* Age Modal */
+        #age-gate {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .age-gate-content {
+            background: var(--bg-dark-secondary);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(230, 0, 122, 0.2);
+        }
+        .age-gate-content h2 { font-size: 1.5rem; margin-bottom: 12px; }
+        .age-gate-content p { color: var(--text-secondary); margin-bottom: 24px; }
+        .age-gate-buttons { display: flex; gap: 12px; }
+        .age-gate-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .age-gate-btn.confirm { background: var(--accent-magenta); color: var(--bg-dark-primary); border: none; }
+        .age-gate-btn.confirm:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-glow); }
+        .age-gate-btn.deny { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
+
+        /* Preview Step */
+        .preview-container {
+            position: relative;
+            width: 100%;
+            padding-top: 125%; /* 4:5 Aspect Ratio */
+            background-color: #000;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .preview-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .unlock-btn {
+            width: 100%;
+            background: var(--accent-magenta);
+            color: var(--bg-dark-primary);
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 20px var(--accent-glow);
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--accent-glow); }
+            50% { transform: scale(1.02); box-shadow: 0 0 35px var(--accent-glow); }
+        }
+        .unlock-btn:hover:not(:disabled) { animation-play-state: paused; transform: scale(1.02); box-shadow: 0 0 30px var(--accent-glow); }
+        .unlock-btn:disabled .spinner { margin: 0 auto; }
+        
+        /* Packages Step */
+        .online-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22C55E;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .online-dot { width: 8px; height: 8px; background: #22C55E; border-radius: 50%; box-shadow: 0 0 8px #22C55E; }
+        
+        .content-list-wrapper {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        .content-list { list-style: none; padding: 0; margin: 0 auto; text-align: left; }
+        .content-list li { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.9rem; }
+
+        .packages-container { display: flex; flex-direction: column; gap: 12px; }
+        .package-btn { background-color: transparent; border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s ease-in-out; position: relative; overflow: hidden; }
+        .package-btn:hover { border-color: var(--accent-magenta); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .package-btn.popular { border-color: var(--accent-magenta); box-shadow: 0 0 15px var(--accent-glow); }
+        .popular-badge { position: absolute; top: -1px; right: 12px; background: var(--accent-magenta); color: var(--bg-dark-primary); padding: 2px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 0 0 5px 5px; }
+        .package-title { color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+        .package-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
+        .package-price { font-family: 'Orbitron', sans-serif; color: var(--accent-magenta); font-size: 1.2rem; font-weight: 700; }
+        
+        /* Payment Step */
+        .payment-info { text-align: center; }
+        .qr-code-display { padding: 12px; border-radius: 12px; margin: 0 auto 24px auto; display: inline-block; line-height: 0; border: 1px solid var(--border-color); background: #FFF; position: relative; overflow: hidden; }
+        .qr-code-display::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent-magenta); opacity: 0.7; box-shadow: 0 0 10px var(--accent-magenta); animation: scan 2.5s infinite linear; }
+        @keyframes scan { 0% { top: -10px; } 100% { top: 110%; } }
+        .pix-code-wrapper { background-color: var(--bg-dark-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+        .pix-code-text { flex-grow: 1; font-family: monospace; font-size: 0.9rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; padding-left: 8px; }
+        .copy-btn { background-color: var(--border-color); color: var(--accent-magenta); border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; flex-shrink: 0; }
+        .copy-btn:hover { background-color: rgba(230, 0, 122, 0.3); }
+        .copy-btn.copied { background-color: var(--success); color: var(--bg-dark-primary); }
+        .spinner { border: 3px solid rgba(255, 255, 255, 0.1); width: 20px; height: 20px; border-radius: 50%; border-left-color: var(--accent-magenta); animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .polling-status { display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-secondary); }
+        
+        /* Success Step */
+        .success-message { text-align: center; }
+        .success-icon { width: 64px; height: 64px; border: 2px solid var(--success); box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); border-radius: 50%; margin: 0 auto 24px auto; display: flex; align-items: center; justify-content: center; color: var(--success); animation: popIn 0.5s ease-out; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .vip-access-btn { display: inline-block; text-decoration: none; margin-top: 24px; background-color: var(--success); color: var(--bg-dark-primary); padding: 16px 32px; border-radius: 8px; font-weight: 700; transition: all 0.2s ease; box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
+        .vip-access-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(34, 197, 94, 0.5); }
+        
+        /* Notification Popup */
+        #notification-popup {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--bg-dark-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+        }
+        #notification-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back Redirect Modal */
+        #back-redirect-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 20000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #back-redirect-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: var(--bg-dark-secondary);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(230, 0, 122, 0.3);
+            max-width: 420px;
+            animation: fadeIn 0.5s ease;
+        }
+        .modal-content h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-magenta);
+            text-shadow: 0 0 10px var(--accent-glow);
+            margin-bottom: 16px;
+        }
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .modal-content #offer-btn {
+            animation: none; /* Disable the pulse on this specific button */
+            margin-bottom: 12px;
+        }
+        .close-modal-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            padding: 8px;
+        }
+
+        /* Error Message */
+        .error-message { display: none; background-color: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; padding: 12px; margin-top: 16px; text-align: center; font-size: 0.9rem; }
+    </style>
+     <script>
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src='https://connect.facebook.net/en_US/fbevents.js';s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script');
+    </script>
+</head>
+<body>
+    <div id="preloader">
+        <div class="spinner" style="border-left-color: var(--accent-magenta);"></div>
+    </div>
+    <div id="age-gate">
+        <div class="age-gate-content">
+            <h2>Você tem mais de 18 anos?</h2>
+            <p>Este conteúdo é exclusivo para adultos. Confirme sua idade para continuar.</p>
+            <div class="age-gate-buttons">
+                <button class="age-gate-btn deny" onclick="window.location.href='https://google.com'">Sair</button>
+                <button id="confirm-age-btn" class="age-gate-btn confirm">Sim, sou maior de 18</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Passo 1: Prévia -->
+        <div id="preview-step" class="step active">
+            <div class="header">
+                <h1>CASAIS REAIS PROCURAM</h1>
+                <p>Elas querem. Eles assistem. Você participa. Casais de <span id="city-name-preview" class="city-highlight">sua cidade</span> estão procurando um homem hoje.</p>
+            </div>
+            <div class="preview-container">
+                <img id="preview-gif" src="https://i.postimg.cc/631TQ59J/Design-sem-nome-4.gif" alt="Preview do conteúdo">
+            </div>
+            <button id="unlock-button" class="unlock-btn">ENTRAR NO GRUPO SECRETO</button>
+        </div>
+
+        <!-- Passo 2: Pacotes -->
+        <div id="packages-step" class="step">
+            <div class="header">
+                <h1>ACESSO AO GRUPO DE <span id="city-name-packages" class="city-highlight">SUA CIDADE</span></h1>
+                <p>Sua contribuição é uma <strong class="city-highlight">taxa de segurança</strong> para proteger a identidade dos nossos casais e garantir que apenas homens interessados entrem. Isso nos ajuda a trazer mais casais reais para você.</p>
+            </div>
+            <div id="online-indicator" class="online-indicator">
+                <div class="online-dot"></div>
+                <span><span id="online-count"></span> casais online em <span class="city-highlight" id="city-name-indicator">sua cidade</span></span>
+            </div>
+            <div class="content-list-wrapper">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">O que você encontra no grupo:</p>
+                <ul class="content-list">
+                    <li>🎥 Filmagens de Swing</li>
+                    <li>🏠 Gravações Caseiras</li>
+                    <li>🔄 Troca de Casais</li>
+                    <li>😈 E muito mais...</li>
+                </ul>
+            </div>
+            <div class="packages-container">
+                <button class="package-btn" data-value="1990">
+                    <div class="package-title">Acesso Bronze</div>
+                    <div class="package-desc">7 dias de acesso aos grupos (Telegram + WhatsApp) para ver os casais.</div>
+                    <div class="package-price">R$ 19,90</div>
+                </button>
+                <button class="package-btn popular" data-value="3990">
+                    <div class="popular-badge">MAIS ESCOLHIDO</div>
+                    <div class="package-title">Acesso Prata</div>
+                    <div class="package-desc">30 dias de acesso total para ver perfis, vídeos e iniciar conversas.</div>
+                    <div class="package-price">R$ 39,90</div>
+                </button>
+                 <button class="package-btn" data-value="4990">
+                    <div class="package-title">Acesso Ouro</div>
+                    <div class="package-desc">Acesso VITALÍCIO, perfil em destaque e prioridade para os novos casais.</div>
+                    <div class="package-price">R$ 49,90</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Passo 3: Pagamento -->
+        <div id="payment-step" class="step">
+            <div class="header">
+                <h1>CONFIRME SUA VERIFICAÇÃO</h1>
+                <p>Finalize o PIX da taxa de segurança para liberar seu acesso imediato aos grupos.</p>
+            </div>
+            <div class="payment-info">
+                 <div class="qr-code-display">
+                     <img id="qr-code-img" src="https://placehold.co/180x180/FFFFFF/0D0F12?text=QR+Code" alt="QR Code PIX">
+                </div>
+                <div class="pix-code-wrapper">
+                    <span id="pix-code-text" class="pix-code-text">Decodificando seu acesso...</span>
+                    <button id="copy-button" class="copy-btn">Copiar</button>
+                </div>
+                <div id="polling-container" class="polling-status">
+                    <div class="spinner"></div>
+                    <span>Aguardando confirmação...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Passo 4: Sucesso -->
+        <div id="success-step" class="step">
+             <div class="success-message">
+                <div class="success-icon">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>
+                </div>
+                <h1>VERIFICAÇÃO CONCLUÍDA!</h1>
+                <p>Seu acesso foi liberado. Entre agora nos grupos de <span id="city-name-success" class="city-highlight">sua cidade</span> e conheça os casais que estão te esperando.</p>
+                <a href="#" id="vip-access-link" class="vip-access-btn" target="_blank">ENTRAR NOS GRUPOS (WHATSAPP + TELEGRAM)</a>
+            </div>
+        </div>
+        
+        <div id="error-message-box" class="error-message"></div>
+    </div>
+
+    <!-- Notification Popup -->
+    <div id="notification-popup">
+        <div class="online-dot"></div>
+        <span id="notification-text"></span>
+    </div>
+    
+    <!-- Back Redirect Offer Modal -->
+    <div id="back-redirect-modal">
+        <div class="modal-content">
+            <img src="https://i.postimg.cc/h4pHkfK5/Design-sem-nome-6.gif" alt="Oferta Especial" style="width: 100%; max-width: 250px; border-radius: 12px; margin: 0 auto 24px auto; border: 1px solid var(--border-color);">
+            <h1>ESPERE! ÚLTIMA CHANCE!</h1>
+            <p>Um casal de <span class="city-highlight" id="city-name-modal">sua cidade</span> acabou de ficar disponível e procura um parceiro para <strong class="city-highlight">AGORA</strong>.</p>
+            <p>Vamos te dar acesso imediato por um valor simbólico de segurança. Esta oferta não aparecerá novamente.</p>
+            <button id="offer-btn" class="unlock-btn" data-value="990">
+                ENTRAR AGORA POR R$ 9,90
+            </button>
+            <button id="close-modal-btn" class="close-modal-btn">Não, obrigado. Perder esta chance.</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÕES ---
+        const API_BASE_URL = 'https://novaapi-one.vercel.app';
+        const SELLER_API_KEY = 'a0b2f4ce-2011-4faf-9e77-52e59bbcb02b';
+        const PRESSEL_ID = 125;
+        const TELEGRAM_USERNAME = 'ferjacobot';
+        const PIXELS_TO_TRACK = [{"id": "1817379038816925"}];
+        
+        // --- ELEMENTOS DO DOM ---
+        const preloader = document.getElementById('preloader');
+        const ageGate = document.getElementById('age-gate');
+        const confirmAgeBtn = document.getElementById('confirm-age-btn');
+        const packagesStep = document.getElementById('packages-step');
+        const paymentStep = document.getElementById('payment-step');
+        const successStep = document.getElementById('success-step');
+        const unlockButton = document.getElementById('unlock-button');
+        const packageButtons = document.querySelectorAll('.package-btn');
+        const pixCodeText = document.getElementById('pix-code-text');
+        const copyButton = document.getElementById('copy-button');
+        const vipAccessLink = document.getElementById('vip-access-link');
+        const errorMessageDiv = document.getElementById('error-message-box');
+        const notificationPopup = document.getElementById('notification-popup');
+        const backRedirectModal = document.getElementById('back-redirect-modal');
+        const offerBtn = document.getElementById('offer-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        
+        // --- VARIÁVEIS DE ESTADO ---
+        let selectedAmountCents = null;
+        let clickId = null;
+        let transactionId = null;
+        let pixCodeToCopy = '';
+        let pollingInterval = null;
+        let userCity = 'sua cidade';
+
+        // --- FUNÇÕES AUXILIARES ---
+        const getCookie = (name) => document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))?.[2] || null;
+
+        function switchStep(activeStep) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            activeStep.classList.add('active');
+        }
+
+        function showError(message) {
+            errorMessageDiv.textContent = `Ops... ${message}`;
+            errorMessageDiv.style.display = 'block';
+            unlockButton.disabled = false;
+            unlockButton.innerHTML = 'ENTRAR NO GRUPO SECRETO';
+        }
+        
+        function clearError() {
+            errorMessageDiv.style.display = 'none';
+        }
+
+        function typeText(element, text, speed = 15) {
+            element.textContent = '';
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, speed);
+        }
+        
+        function setCityName(cityName) {
+            const finalCityName = (cityName && cityName.toUpperCase() !== 'DESCONHECIDA') ? cityName.toUpperCase() : 'SUA CIDADE';
+            userCity = finalCityName;
+            document.getElementById('city-name-preview').textContent = finalCityName;
+            document.getElementById('city-name-packages').textContent = finalCityName;
+            document.getElementById('city-name-success').textContent = finalCityName;
+            document.getElementById('city-name-indicator').textContent = `em ${finalCityName}`;
+            document.getElementById('city-name-modal').textContent = finalCityName;
+        }
+        
+        function showNotification() {
+            const names = ['Juliana', 'Camila', 'Beatriz', 'Larissa', 'Sofia'];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const actions = ['e seu marido acabaram de entrar', 'está procurando um parceiro agora', 'acabou de postar no grupo'];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            
+            document.getElementById('notification-text').textContent = `${randomName} de ${userCity} ${randomAction}...`;
+            
+            notificationPopup.classList.add('show');
+            setTimeout(() => {
+                notificationPopup.classList.remove('show');
+            }, 5000);
+        }
+
+        // --- LÓGICA DA API ---
+        async function initializeSession() {
+            clearError();
+            
+            const onlineCount = Math.floor(Math.random() * 6) + 5; // 5-10
+            document.getElementById('online-count').textContent = onlineCount;
+
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const clickResponse = await fetch(`${API_BASE_URL}/api/registerClick`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        sellerApiKey: SELLER_API_KEY, presselId: PRESSEL_ID,
+                        referer: document.referrer || null, fbclid: params.get("fbclid"), 
+                        fbp: getCookie("_fbp"), fbc: getCookie("_fbc"), user_agent: navigator.userAgent, 
+                        utm_source: params.get("utm_source"), utm_campaign: params.get("utm_campaign"), 
+                        utm_medium: params.get("utm_medium"), utm_content: params.get("utm_content"), 
+                        utm_term: params.get("utm_term")
+                    })
+                });
+
+                if (!clickResponse.ok) throw new Error((await clickResponse.json()).message || 'Não consegui registrar seu acesso...');
+                
+                const clickData = await clickResponse.json();
+                clickId = clickData.click_id;
+
+                const cityResponse = await fetch(`${API_BASE_URL}/api/click/info`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': SELLER_API_KEY },
+                    body: JSON.stringify({ click_id: clickId })
+                });
+
+                if (cityResponse.ok) {
+                    const cityData = await cityResponse.json();
+                    setCityName(cityData.city);
+                } else { setCityName(null); }
+                
+                setTimeout(showNotification, 4000);
+                setInterval(showNotification, 12000);
+
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                showError(error.message);
+                setCityName(null);
+            }
+        }
+
+
+        async function handlePackageSelection(valueCents) {
+            clearError();
+            selectedAmountCents = valueCents;
+            
+            const currentStep = document.querySelector('.step.active');
+            currentStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
+
+            try {
+                if (!clickId) throw new Error("Sessão inválida. Por favor, atualize a página.");
+
+                const pixResponse = await fetch(`${API_BASE_URL}/api/pix/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': SELLER_API_KEY },
+                    body: JSON.stringify({ click_id: clickId, value_cents: selectedAmountCents })
+                });
+                
+                if (!pixResponse.ok) throw new Error((await pixResponse.json()).message || 'Não consegui gerar nosso código secreto.');
+                
+                const pixData = await pixResponse.json();
+                transactionId = pixData.transaction_id;
+                pixCodeToCopy = pixData.qr_code_text;
+
+                if (pixData.qr_code_base64) {
+                    document.getElementById('qr-code-img').src = `data:image/png;base64,${pixData.qr_code_base64}`;
+                }
+
+                switchStep(paymentStep);
+                setTimeout(() => {
+                    typeText(pixCodeText, pixCodeToCopy);
+                    vipAccessLink.href = `https://t.me/${TELEGRAM_USERNAME}?start=${clickId}`;
+                    startPolling();
+                }, 300);
+
+            } catch (error) {
+                console.error('Erro no processo:', error);
+                window.location.reload();
+            }
+        }
+
+        async function checkPaymentStatus() {
+            if (!transactionId) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/pix/status/${transactionId}`, { headers: { 'x-api-key': SELLER_API_KEY } });
+                const data = await response.json();
+                if (data.status === 'paid') {
+                    stopPolling();
+                    fbq('track', 'Purchase', {value: selectedAmountCents / 100, currency: 'BRL'});
+                    switchStep(successStep);
+                }
+            } catch (error) { console.error('Erro ao verificar status do pagamento:', error); }
+        }
+
+        function startPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            checkPaymentStatus();
+            pollingInterval = setInterval(checkPaymentStatus, 2500);
+        }
+
+        function stopPolling() {
+            clearInterval(pollingInterval);
+        }
+
+        // --- EVENT LISTENERS ---
+        window.onload = () => {
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            PIXELS_TO_TRACK.forEach(p => { fbq('init', p.id); });
+            fbq('track', 'PageView');
+            
+            confirmAgeBtn.addEventListener('click', () => {
+                ageGate.style.display = 'none';
+                initializeSession();
+                
+                let backButtonHandlerActive = true;
+                history.pushState(null, document.title, location.href); 
+                window.addEventListener('popstate', function handleBackButton() {
+                    if (backButtonHandlerActive) {
+                        history.pushState(null, document.title, location.href);
+                        backRedirectModal.classList.add('show');
+                        backButtonHandlerActive = false;
+                    }
+                });
+            });
+
+            unlockButton.addEventListener('click', () => {
+                 fbq('track', 'InitiateCheckout');
+                switchStep(packagesStep);
+            });
+
+            packageButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = parseInt(button.dataset.value, 10);
+                    handlePackageSelection(value);
+                });
+            });
+            
+            offerBtn.addEventListener('click', () => {
+                const value = parseInt(offerBtn.dataset.value, 10);
+                backRedirectModal.classList.remove('show');
+                handlePackageSelection(value);
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                backRedirectModal.classList.remove('show');
+            });
+
+            copyButton.addEventListener('click', () => {
+                if (!pixCodeToCopy) return;
+                navigator.clipboard.writeText(pixCodeToCopy).then(() => {
+                    copyButton.textContent = 'Copiado!';
+                    copyButton.classList.add('copied');
+                    setTimeout(() => {
+                        copyButton.textContent = 'Copiar';
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => console.error('Falha ao copiar:', err));
+            });
+        });
+    </script>
+     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1817379038816925&ev=PageView&noscript=1"/></noscript>
+</body>
+</html>
+
