@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso Privado - Casais Liberais</title>
+    <title>Acesso Privado - Oásis Da Putaria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://novaapi-one.vercel.app">
@@ -190,7 +190,7 @@
             padding: 16px;
             margin-bottom: 24px;
         }
-        .content-list { list-style: none; padding: 0; margin: 0 auto; text-align: left; }
+        .content-list { list-style: none; padding: 0; margin: 0 auto; text-align: left; columns: 2; -webkit-columns: 2; -moz-columns: 2; }
         .content-list li { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.9rem; }
 
         .packages-container { display: flex; flex-direction: column; gap: 12px; }
@@ -202,6 +202,25 @@
         .package-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
         .package-price { font-family: 'Orbitron', sans-serif; color: var(--accent-magenta); font-size: 1.2rem; font-weight: 700; }
         
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 24px 0;
+            position: relative;
+        }
+        .divider::before {
+            content: 'OU';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-dark-secondary);
+            padding: 0 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
         /* Payment Step */
         .payment-info { text-align: center; }
         .qr-code-display { padding: 12px; border-radius: 12px; margin: 0 auto 24px auto; display: inline-block; line-height: 0; border: 1px solid var(--border-color); background: #FFF; position: relative; overflow: hidden; }
@@ -333,32 +352,34 @@
         <!-- Passo 1: Prévia -->
         <div id="preview-step" class="step active">
             <div class="header">
-                <h1>CASAIS REAIS PROCURAM</h1>
-                <p>Elas querem. Eles assistem. Você participa. Casais de <span id="city-name-preview" class="city-highlight">sua cidade</span> estão procurando um homem hoje.</p>
+                <h1>BEM-VINDO AO OÁSIS</h1>
+                <p>O lugar secreto onde casais de <span id="city-name-preview" class="city-highlight">sua cidade</span> procuram homens para realizar suas fantasias.</p>
             </div>
             <div class="preview-container">
                 <img id="preview-gif" src="https://i.postimg.cc/631TQ59J/Design-sem-nome-4.gif" alt="Preview do conteúdo">
             </div>
-            <button id="unlock-button" class="unlock-btn">ENTRAR NO GRUPO SECRETO</button>
+            <button id="unlock-button" class="unlock-btn">ENTRAR NO OÁSIS DA PUTARIA</button>
         </div>
 
         <!-- Passo 2: Pacotes -->
         <div id="packages-step" class="step">
             <div class="header">
-                <h1>ACESSO AO GRUPO DE <span id="city-name-packages" class="city-highlight">SUA CIDADE</span></h1>
-                <p>Sua contribuição é uma <strong class="city-highlight">taxa de segurança</strong> para proteger a identidade dos nossos casais e garantir que apenas homens interessados entrem. Isso nos ajuda a trazer mais casais reais para você.</p>
+                <h1>ENTRE NO OÁSIS DE <span id="city-name-packages" class="city-highlight">SUA CIDADE</span></h1>
+                <p>Sua <strong class="city-highlight">taxa de segurança</strong> protege o sigilo dos casais e garante que apenas homens de verdade entrem. Assim, trazemos mais casais para você.</p>
             </div>
             <div id="online-indicator" class="online-indicator">
                 <div class="online-dot"></div>
                 <span><span id="online-count"></span> casais online em <span class="city-highlight" id="city-name-indicator">sua cidade</span></span>
             </div>
-            <div class="content-list-wrapper">
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">O que você encontra no grupo:</p>
+             <div class="content-list-wrapper">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">Você terá acesso a filmagens reais de:</p>
                 <ul class="content-list">
-                    <li>🎥 Filmagens de Swing</li>
-                    <li>🏠 Gravações Caseiras</li>
-                    <li>🔄 Troca de Casais</li>
-                    <li>😈 E muito mais...</li>
+                    <li>🎁 Sexo Anal 🍩</li>
+                    <li>🎁 Sexo com Amigas 👭</li>
+                    <li>🎁 Gozando Muito 💦</li>
+                    <li>🎁 Ménage 😈</li>
+                    <li>🎁 Sexo na Praia 🌴</li>
+                    <li>🎁 E muito mais...</li>
                 </ul>
             </div>
             <div class="packages-container">
@@ -379,6 +400,14 @@
                     <div class="package-price">R$ 49,90</div>
                 </button>
             </div>
+
+            <div class="divider"></div>
+
+            <button class="package-btn" data-value="7999">
+                <div class="package-title">😈 Quero que comam minha esposa</div>
+                <div class="package-desc">Poste o perfil dela anonimamente e encontre parceiros selecionados.</div>
+                <div class="package-price">R$ 79,99</div>
+            </button>
         </div>
 
         <!-- Passo 3: Pagamento -->
@@ -408,9 +437,9 @@
                 <div class="success-icon">
                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>
                 </div>
-                <h1>VERIFICAÇÃO CONCLUÍDA!</h1>
+                <h1>BEM-VINDO AO OÁSIS!</h1>
                 <p>Seu acesso foi liberado. Entre agora nos grupos de <span id="city-name-success" class="city-highlight">sua cidade</span> e conheça os casais que estão te esperando.</p>
-                <a href="#" id="vip-access-link" class="vip-access-btn" target="_blank">ENTRAR NOS GRUPOS (WHATSAPP + TELEGRAM)</a>
+                <a href="#" id="vip-access-link" class="vip-access-btn" target="_blank">ENTRAR NO OÁSIS (WHATSAPP + TELEGRAM)</a>
             </div>
         </div>
         
@@ -646,7 +675,6 @@
             preloader.style.opacity = '0';
             setTimeout(() => preloader.style.display = 'none', 500);
             
-            // Inicia a captura da cidade em segundo plano, antes mesmo da confirmação de idade
             initializeSession();
         };
 
@@ -673,7 +701,7 @@
                 switchStep(packagesStep);
             });
 
-            packageButtons.forEach(button => {
+            document.querySelectorAll('.package-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const value = parseInt(button.dataset.value, 10);
                     handlePackageSelection(value);
