@@ -267,7 +267,7 @@
         }
         .modal-content {
             background: var(--bg-dark-secondary);
-            padding: 28px;
+            padding: 24px;
             border-radius: 16px;
             text-align: center;
             border: 1px solid var(--accent-magenta);
@@ -275,6 +275,12 @@
             width: 100%;
             max-width: 380px;
             animation: fadeIn 0.5s ease;
+        }
+        .modal-content .preview-container {
+             width: 100%;
+            max-width: 250px; /* Limit image size */
+            padding-top: 100%; /* Square aspect ratio for the image */
+            margin: 0 auto 24px auto;
         }
         .modal-content h1 {
             font-family: 'Orbitron', sans-serif;
@@ -289,7 +295,7 @@
             line-height: 1.6;
         }
         .modal-content #offer-btn {
-            animation: none; /* Disable the pulse on this specific button */
+            animation: pulse-glow 2s infinite ease-in-out;
             margin-bottom: 12px;
         }
         .close-modal-btn {
@@ -420,10 +426,12 @@
     <!-- Back Redirect Offer Modal -->
     <div id="back-redirect-modal">
         <div class="modal-content">
-            <img src="https://i.postimg.cc/h4pHkfK5/Design-sem-nome-6.gif" alt="Oferta Especial" style="width: 100%; max-width: 250px; border-radius: 12px; margin: 0 auto 24px auto; border: 1px solid var(--border-color);">
+             <div class="preview-container">
+                <img src="https://i.postimg.cc/h4pHkfK5/Design-sem-nome-6.gif" alt="Oferta Especial">
+            </div>
             <h1>ESPERE! ÚLTIMA CHANCE!</h1>
-            <p>Um casal de <span class="city-highlight" id="city-name-modal">sua cidade</span> acabou de ficar disponível e procura um parceiro para <strong class="city-highlight">AGORA</strong>.</p>
-            <p>Vamos te dar acesso imediato por um valor simbólico de segurança. Esta oferta não aparecerá novamente.</p>
+            <p>Um casal de <span class="city-highlight" id="city-name-modal">sua cidade</span> ficou disponível e procura um parceiro para <strong class="city-highlight">AGORA</strong>.</p>
+            <p>Acesso imediato por uma taxa simbólica. Esta oferta não aparecerá novamente.</p>
             <button id="offer-btn" class="unlock-btn" data-value="990">
                 ENTRAR AGORA POR R$ 9,90
             </button>
@@ -574,7 +582,7 @@
             clearError();
             selectedAmountCents = valueCents;
             
-            const currentStep = document.querySelector('.step.active');
+            const currentStep = document.querySelector('.step.active') || document.querySelector('.modal-content');
             currentStep.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height: 200px;"><div class="spinner"></div></div>';
 
             try {
@@ -596,6 +604,7 @@
                     document.getElementById('qr-code-img').src = `data:image/png;base64,${pixData.qr_code_base64}`;
                 }
 
+                backRedirectModal.classList.remove('show');
                 switchStep(paymentStep);
                 setTimeout(() => {
                     typeText(pixCodeText, pixCodeToCopy);
@@ -647,7 +656,6 @@
             
             confirmAgeBtn.addEventListener('click', () => {
                 ageGate.style.display = 'none';
-                // A sessão já foi iniciada no window.onload
                 
                 let backButtonHandlerActive = true;
                 history.pushState(null, document.title, location.href); 
@@ -674,7 +682,6 @@
             
             offerBtn.addEventListener('click', () => {
                 const value = parseInt(offerBtn.dataset.value, 10);
-                backRedirectModal.classList.remove('show');
                 handlePackageSelection(value);
             });
 
